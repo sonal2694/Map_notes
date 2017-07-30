@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="https://fonts.googleapis.com/css?family=Quicksand:300" rel="stylesheet">
+	<script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
+	 <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-blue.min.css" />  
+    <!-- Material Design icon font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body>
+<style type="text/css">
+
+	.topdiv
+	{
+		left: 0%;
+		top: 0%;
+		position: absolute;
+		width: 100vw;
+		background-color: #FCFFF5;
+		box-shadow: 0px 5px 5px 2px #D7D7D7;
+	}
+	.welcomediv
+	{
+		position: absolute;
+		font-size: 20px;
+		color: #3E606F;
+		font-family: 'Quicksand', sans-serif;
+		padding-top: 10px;
+		padding-left: 10px;
+		left: 0%;
+	}
+	a
+	{
+		left: 40%;
+		color: #3E606F;
+		font-family: 'Quicksand', sans-serif;
+	}
+	.tabareadiv
+	{
+		position: relative;
+		top: 40px;
+	}
+	#map
+	{
+		height: 100vh;
+		width: 100%;
+	}
+
+</style>
+
+	<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+  	<!-- Tab Bars -->
+  		<div  class="topdiv" class="mdl-tabs__tab-bar">
+  			<div class="welcomediv">Hello {{text}}!</div>
+  			<a href="#map" class="mdl-tabs__tab is-active">Map</a>
+  			<a href="#europe-panel" class="mdl-tabs__tab">Saved Notes</a>
+  		</div>
+	  
+	  	<div style="position: relative; top: 40px;" class="mdl-tabs__panel is-active" id="map"></div>
+  
+  		<!-- MDL Tab panel 2 -->
+  		<div style="position: relative; top: 40px;" class="mdl-tabs__panel" id="europe-panel">
+	  		<ul>
+	  			<li>Note 1</li>
+	  			<li>Note 2</li>
+	  			<li>Note 3</li>
+	  			<li>Note 4</li>
+	  		</ul>
+  		</div>
+
+	<script>
+		var map, infoWindow;
+		function initMap() {
+			// var uluru = {lat: -25.363, lng: 131.044};
+			var map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 4,
+				center: {lat: -25.363, lng: 131.044}
+			});
+
+			infoWindow = new google.maps.InfoWindow;
+			// Try HTML5 geolocation.
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position) {
+					var pos = {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+				infoWindow.setPosition(pos);
+            	infoWindow.setContent('Location found.');
+            	infoWindow.open(map);
+            	map.setCenter(pos);
+            	var marker = new google.maps.Marker({
+				position: pos,
+				map: map
+				});
+            }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+        	});
+        	}
+        	else {
+          		// Browser doesn't support Geolocation
+          		handleLocationError(false, infoWindow, map.getCenter());
+        	}
+			
+		}
+
+		function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        	infoWindow.setPosition(pos);
+        	infoWindow.setContent(browserHasGeolocation ?
+        		'Error: The Geolocation service failed.' : 'Error: Your browser doesn\'t support geolocation.');
+        	infoWindow.open(map);
+      	}
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0tq54oWF7l6Wft-xyMG5A3sNUiw43hLY&callback=initMap">
+    </script>
+
+</body>
+</html>
