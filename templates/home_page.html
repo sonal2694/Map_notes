@@ -2,10 +2,13 @@
 <html>
 <head>
 	<title></title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Quicksand:300" rel="stylesheet">
 	<script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-blue.min.css" />  
+	<link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-blue.min.css"/>  
     <!-- Material Design icon font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
@@ -47,136 +50,185 @@
 		height: 100vh;
 		width: 100%;
 	}
+	.popupdiv
+	{
+		/*position: absolute;*/
+		display:none;
+		left: 40%;
+		top: 20%;
+		font-family: 'Quicksand', sans-serif;
+		font-size: 15px;
+		background-color: #FCFFF5;
+		border: 3px solid #3E606F;
+		box-shadow: 0 0 8px #3E606F;
+	}
+	.popuptitle
+	{
+		font-size: 20px;
+		font-weight: bold;
+		color: #3E606F;
+		font-family: 'Quicksand', sans-serif;
+		text-align: center;
+		margin-top: 10px;
+	}
+	.centerform
+	{
+		margin: 0 auto;
+	}
+	.textbox
+	{
+		border: 0;
+  		outline: 0;
+		border-bottom: 1px solid #91AA9D;
+		background-color: #FCFFF5;
+		color: #3E606F;
+		font-family: 'Quicksand', sans-serif;
+		margin-left: 45px;
+		margin-right: 20px;
+		display: inline-block;
+  		
+	}
+	.no-close .ui-dialog-titlebar-close
+	{
+		display: none;
+	}
+	.btn
+	{
+		background-color: #3E606F;
+		border: 2px solid #3E606F;
+	    color: white;
+	    padding: 4px 4px;
+	    text-decoration: none;
+	    margin: 4px 2px;
+	    cursor: pointer;
+	    margin-left: 35%;
+	    /*font-family: 'Quicksand', sans-serif;*/
+	}
 </style>
 
-	<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
-  	<!-- Tab Bars -->
-  		<div  class="topdiv" class="mdl-tabs__tab-bar">
-  			<div class="welcomediv">Hello {{text}}!</div>
-  			<a href="#map" style="color: #3E606F;" class="mdl-tabs__tab is-active">Map</a>
-  			<a href="#notes-panel" style="color: #3E606F;" class="mdl-tabs__tab">Saved Notes</a>
-  		</div>
-	  
-	  	<div style="position: relative; top: 58px;" class="mdl-tabs__panel is-active" id="map">
-	  	</div>
+<div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect">
+<!-- Tab Bars -->
+	<div  class="topdiv" class="mdl-tabs__tab-bar">
+		<div class="welcomediv">Hello {{text}}!</div>
+		<a href="#map" style="color: #3E606F;" class="mdl-tabs__tab is-active">Map</a>
+		<a href="#notes-panel" style="color: #3E606F;" class="mdl-tabs__tab">Saved Notes</a>
+	</div>
+	<div class="popupdiv" id="popupdiv" title="">
+		<p class="popuptitle">Add your Note</p>
+		<form class="centerform">
+			<br>
+			<input type="text" class="textbox" name="title" placeholder="Title...">
+			<br><br>
+			<input type="text" class="textbox" name="description" placeholder="Description...">
+			<br><br>
+			<input type="submit" class="btn" value="SAVE">
+		</form>
+	</div>
+  	<div style="position: relative; top: 58px;" class="mdl-tabs__panel is-active" id="map">
+  	</div>
+	<!-- MDL Tab panel 2 -->
+	<div style="position: relative; top: 60px;" class="mdl-tabs__panel" id="notes-panel">
+  		<ul>
+  			<li>Note 1</li>
+  			<li>Note 2</li>
+  			<li>Note 3</li>
+  			<li>Note 4</li>
+  		</ul>
+	</div>
 
-	  	<div id="divdeps" style="display:none" title="">
-	  			<form action="/send" method="POST">
-					<input type="text" name="query" placeholder="Search..">
-				</form>
-	  	</div>
-	  	
-  
-  		<!-- MDL Tab panel 2 -->
-  		<div style="position: relative; top: 60px;" class="mdl-tabs__panel" id="notes-panel">
-	  		<ul>
-	  			<li>Note 1</li>
-	  			<li>Note 2</li>
-	  			<li>Note 3</li>
-	  			<li>Note 4</li>
-	  		</ul>
-  		</div>
+<script>
 
-	<script>
+	function showpopup()
+	{
+		$('#popupdiv').dialog({
+			dialogClass: 'no-close',
+			autoOpen: false,
+	        modal: true,
+	        height: 400,
+	        width: 300
+		}).dialog('open');
+	}
 
-		function CenterControl(controlDiv, map) {
+	function CenterControl(controlDiv, map) {
+        // Set CSS for the control border.
+		var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#3E606F';
+        controlUI.style.border = '2px solid #3E606F';
+        controlUI.style.borderRadius = '40px';
+        controlUI.style.boxShadow = '0 0 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.marginTop = '10px';
+        controlUI.style.marginRight = '10px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to add an event/note';
+        controlDiv.appendChild(controlUI);
+        // Set CSS for the control interior.
+        var controlText = document.createElement('div');
+        controlText.style.color = '#FCFFF5';
+        controlText.style.fontFamily = 'Quicksand,sans-serif';
+        controlText.style.fontSize = '32px';
+        controlText.style.lineHeight = '38px';
+        controlText.style.paddingLeft = '12px';
+        controlText.style.paddingRight = '12px';
+        controlText.style.paddingBottom = '5px';
+        controlText.innerHTML = '+';
+        controlUI.appendChild(controlText);
+        // Setup the click event listeners: simply set the map to Chicago.
+        controlUI.addEventListener('click', function() {
+        	showpopup();
+	        // map.setCenter(chicago);
+	        // alert ("This is a warning message!");
+        });
+   	}
 
-	        // Set CSS for the control border.
-			var controlUI = document.createElement('div');
-	        controlUI.style.backgroundColor = '#3E606F';
-	        controlUI.style.border = '2px solid #3E606F';
-	        controlUI.style.borderRadius = '40px';
-	        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-	        controlUI.style.cursor = 'pointer';
-	        controlUI.style.marginBottom = '22px';
-	        controlUI.style.marginTop = '10px';
-	        controlUI.style.marginRight = '10px';
-	        controlUI.style.textAlign = 'center';
-	        controlUI.title = 'Click to add an event/note';
-	        controlDiv.appendChild(controlUI);
-
-	        // Set CSS for the control interior.
-	        var controlText = document.createElement('div');
-	        controlText.style.color = '#FCFFF5';
-	        controlText.style.fontFamily = 'Quicksand,sans-serif';
-	        controlText.style.fontSize = '32px';
-	        controlText.style.lineHeight = '38px';
-	        controlText.style.paddingLeft = '12px';
-	        controlText.style.paddingRight = '12px';
-	        controlText.style.paddingBottom = '5px';
-	        controlText.innerHTML = '+';
-	        controlUI.appendChild(controlText);
-
-	        // Setup the click event listeners: simply set the map to Chicago.
-	        controlUI.addEventListener('click', function() {
-	          // map.setCenter(chicago);
-	          $("#divdeps").dialog('open');
-	        });
-
-    	}
-
-
-		var map, infoWindow;
-		function initMap() {
-			var map = new google.maps.Map(document.getElementById('map'), {
-				zoom: 4,
-				center: {lat: -25.363, lng: 131.044}
-			});
-
-			// Create the DIV to hold the control and call the CenterControl()
-			// constructor passing in this DIV.
-			var centerControlDiv = document.createElement('div');
-        	var centerControl = new CenterControl(centerControlDiv, map);
-        	centerControlDiv.index = 1;
-        	map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerControlDiv);
-
-
-			infoWindow = new google.maps.InfoWindow;
-			// Try HTML5 geolocation.
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function(position) {
-					var pos = {
-						lat: position.coords.latitude,
-						lng: position.coords.longitude
-					};
+	var map, infoWindow;
+	function initMap() {
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 4,
+			center: {lat: -25.363, lng: 131.044}
+		});
+		// Create the DIV to hold the control and call the CenterControl()
+		// constructor passing in this DIV.
+		var centerControlDiv = document.createElement('div');
+       	var centerControl = new CenterControl(centerControlDiv, map);
+       	centerControlDiv.index = 1;
+       	map.controls[google.maps.ControlPosition.RIGHT_TOP].push(centerControlDiv);
+		infoWindow = new google.maps.InfoWindow;
+		// Try HTML5 geolocation.
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+				var pos = {
+					lat: position.coords.latitude,
+					lng: position.coords.longitude
+				};
 				infoWindow.setPosition(pos);
-            	infoWindow.setContent('Location found.');
-            	infoWindow.open(map);
-            	map.setCenter(pos);
-            	var marker = new google.maps.Marker({
-				position: pos,
-				map: map
+           		infoWindow.setContent('Location found.');
+           		infoWindow.open(map);
+           		map.setCenter(pos);
+           		var marker = new google.maps.Marker({
+					position: pos,
+					map: map
 				});
-            }, function() {
-            		handleLocationError(true, infoWindow, map.getCenter());
-        		});
-        	}
-        	else {
-          		// Browser doesn't support Geolocation
-          		handleLocationError(false, infoWindow, map.getCenter());
-        	}
-			$("#divdeps").dialog({
-			    autoOpen: false,
-			    show: 'slide',
-			    resizable: false,
-			    position: 'center',
-			    stack: true,
-			    height: 'auto',
-			    width: 'auto',
-			    modal: true
-			});
-			
-		}
+        	}, function() {
+           		handleLocationError(true, infoWindow, map.getCenter());
+        	});
+        }
+       	else {
+       		// Browser doesn't support Geolocation
+       		handleLocationError(false, infoWindow, map.getCenter());
+      	}			
+	}
 
-		function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        	infoWindow.setPosition(pos);
-        	infoWindow.setContent(browserHasGeolocation ?
-        		'Error: The Geolocation service failed.' : 'Error: Your browser doesn\'t support geolocation.');
-        	infoWindow.open(map);
-      	}
-    </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0tq54oWF7l6Wft-xyMG5A3sNUiw43hLY&callback=initMap">
-    </script>
+	function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+       	infoWindow.setPosition(pos);
+       	infoWindow.setContent(browserHasGeolocation ?
+       		'Error: The Geolocation service failed.' : 'Error: Your browser doesn\'t support geolocation.');
+	   	infoWindow.open(map);
+   	}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0tq54oWF7l6Wft-xyMG5A3sNUiw43hLY&callback=initMap">
+</script>
 
 </body>
 </html>
